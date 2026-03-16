@@ -51,6 +51,9 @@ export default function LandingPage() {
             <span className="text-xl font-bold tracking-tight">VoxClip AI</span>
           </div>
           <div className="flex items-center gap-4">
+            <Link href="/threejs">
+              <span className="text-sm font-medium text-primary hover:text-primary/80 transition-colors mr-2 cursor-pointer">Three.js Docs</span>
+            </Link>
             <a href="https://github.com/SKYGOD07/VoxClip-AI" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
               <Github className="h-5 w-5" />
             </a>
@@ -211,7 +214,7 @@ export default function LandingPage() {
           <div className="flex gap-4">
             <Dialog>
               <DialogTrigger asChild>
-                <Button variant="link" className="text-muted-foreground hover:text-foreground">Challenges & Learnings</Button>
+                <Button variant="ghost" className="text-muted-foreground hover:text-foreground hover:bg-transparent px-0 underline-offset-4 hover:underline">Challenges & Learnings</Button>
               </DialogTrigger>
               <DialogContent className="max-w-2xl">
                 <DialogHeader>

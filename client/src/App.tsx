@@ -9,11 +9,13 @@ import VideosListPage from "@/pages/videos-list";
 import VideoDetailPage from "@/pages/video-detail";
 import NotFound from "@/pages/not-found";
 import LandingPage from "@/pages/landing-page";
+import ThreeJsPresentationPage from "@/pages/threejs-presentation";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={LandingPage} />
+      <Route path="/threejs" component={ThreeJsPresentationPage} />
       
       {/* App Routes wrapped in Layout */}
       <Route path="/app">
