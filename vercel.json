@@ -1,0 +1,11 @@
+{
+  "projectSettings": {
+    "buildCommand": "npx vite build",
+    "outputDirectory": "client/dist",
+    "installCommand": "npm install",
+    "framework": null
+  },
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
