@@ -11,6 +11,17 @@
 
 ---
 
+## 🎨 Design System
+
+VoxClip AI features a refined, high-performance design system centered on:
+- **Glassmorphism:** High-transparency layers with 20px blurs and defined edge lighting.
+- **Visual Depth:** Immersive full-height layouts with grain overlays to prevent banding.
+- **Monochrome & Emerald:** A sleek, dark-mode focused palette with vibrant emerald highlights for active agents.
+- **Fluid Motion:** Smooth, cubic-bezier driven entry animations and interactive hover scaling.
+
+
+---
+
 ## 💡 Inspiration
 
 Editing long videos to find highlights is slow and tedious. Content creators often spend hours manually scrubbing timelines just to find a few useful moments. We wanted to remove this friction by replacing manual editing with a futuristic conversational AI experience.

@@ -51,12 +51,18 @@ const Section = ({ id, icon: Icon, title, children }: { id: string, icon: any, t
       transition={{ duration: 0.7, ease: "easeOut" }}
       className="mb-24 relative scroll-mt-24"
     >
-      <div className="flex items-center gap-3 mb-8 pb-4 border-b border-white/5">
+      <motion.div 
+        initial={{ scale: 0.8, opacity: 0 }}
+        whileInView={{ scale: 1, opacity: 1 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ type: "spring", stiffness: 200, damping: 20 }}
+        className="flex items-center gap-3 mb-8 pb-4 border-b border-white/5"
+      >
         <div className="h-10 w-10 rounded-lg bg-primary/20 flex items-center justify-center border border-primary/30 shadow-[0_0_15px_rgba(var(--primary),0.3)]">
           <Icon className="h-5 w-5 text-primary" />
         </div>
         <h2 className="text-3xl font-bold tracking-tight text-white/90 drop-shadow-md">{title}</h2>
-      </div>
+      </motion.div>
       <div className="prose prose-invert max-w-none prose-p:text-muted-foreground prose-li:text-muted-foreground prose-strong:text-primary/90">
         {children}
       </div>
@@ -97,11 +103,36 @@ export default function ThreeJsPresentationPage() {
 
   return (
     <div className="min-h-screen bg-[#030014] text-gray-200 selection:bg-primary/40 font-sans">
-      {/* Background Effects */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-primary/10 blur-[150px]" />
-        <div className="absolute top-[40%] right-[-20%] w-[60%] h-[60%] rounded-full bg-purple-600/10 blur-[150px]" />
-        <div className="absolute bottom-[-20%] left-[20%] w-[40%] h-[40%] rounded-full bg-blue-600/10 blur-[120px]" />
+      {/* Animated Background Elements */}
+      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        <motion.div 
+          animate={{ scale: [1, 1.2, 1], rotate: [0, 90, 0] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-primary/10 blur-[150px]" 
+        />
+        <motion.div 
+          animate={{ scale: [1, 1.5, 1], rotate: [0, -90, 0] }}
+          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+          className="absolute top-[40%] right-[-20%] w-[60%] h-[60%] rounded-full bg-purple-600/10 blur-[150px]" 
+        />
+        <motion.div 
+          animate={{ y: [0, -50, 0] }}
+          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute bottom-[-20%] left-[20%] w-[40%] h-[40%] rounded-full bg-blue-600/10 blur-[120px]" 
+        />
+        
+        {/* Floating geometric shapes to match 3D theme */}
+        <motion.div
+           animate={{ y: [-20, 20, -20], x: [-10, 10, -10], rotate: [0, 180, 360] }}
+           transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+           className="absolute top-[20%] right-[10%] w-32 h-32 border border-primary/20 rounded-xl rotate-45 backdrop-blur-[2px]"
+        />
+        <motion.div
+           animate={{ y: [20, -20, 20], x: [10, -10, 10], rotate: [360, 180, 0] }}
+           transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+           className="absolute bottom-[30%] left-[5%] w-24 h-24 border border-purple-500/20 rounded-full backdrop-blur-[2px]"
+        />
+
         {/* Subtle noise texture */}
         <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noiseFilter\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.65\' numOctaves=\'3\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noiseFilter)\'/%3E%3C/svg%3E")' }}></div>
       </div>
@@ -153,17 +184,28 @@ export default function ThreeJsPresentationPage() {
         <main className="flex-1 max-w-4xl pt-8 pb-32">
           
           <motion.div 
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.8, type: "spring", bounce: 0.4 }}
             className="mb-20"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-8">
+            <motion.div 
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-8"
+            >
               <Box className="h-4 w-4" />
               <span>Developer Reference</span>
-            </div>
+            </motion.div>
             <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6">
-              Three.js <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-purple-400 to-blue-500">Animation</span>
+              Three.js <motion.span 
+                animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
+                className="text-transparent bg-clip-text bg-[length:200%_auto] bg-gradient-to-r from-primary via-purple-400 to-blue-500"
+              >
+                Animation
+              </motion.span>
             </h1>
             <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl">
               A comprehensive guide to leveraging the powerful animation system within Three.js to build dynamic, responsive 3D experiences.
@@ -197,15 +239,29 @@ animate();`}
             <p className="text-lg mb-6">The Three.js animation system is composed of three interconnected primary components working in tandem:</p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-8">
               {[
-                { title: "AnimationClip", desc: "Container holding reusable keyframe data for specific animations.", icon: Box },
-                { title: "AnimationMixer", desc: "The core engine that plays and blends animations on a root object.", icon: Cpu },
-                { title: "AnimationAction", desc: "Controller managing the playback status of a specific clip through a mixer.", icon: Code2 }
+                { title: "AnimationClip", desc: "Container holding reusable keyframe data for specific animations.", icon: Box, delay: 0.1 },
+                { title: "AnimationMixer", desc: "The core engine that plays and blends animations on a root object.", icon: Cpu, delay: 0.2 },
+                { title: "AnimationAction", desc: "Controller managing the playback status of a specific clip through a mixer.", icon: Code2, delay: 0.3 }
               ].map((item, i) => (
-                <div key={i} className="p-6 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors">
-                  <item.icon className="h-8 w-8 text-primary mb-4" />
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ delay: item.delay, duration: 0.5, type: "spring" }}
+                  whileHover={{ y: -5, scale: 1.02, backgroundColor: "rgba(255,255,255,0.1)", borderColor: "rgba(var(--primary), 0.5)" }}
+                  key={i} 
+                  className="p-6 rounded-xl border border-white/10 bg-white/5 transition-all text-left group"
+                >
+                  <motion.div 
+                    whileHover={{ rotate: 360 }}
+                    transition={{ duration: 0.5 }}
+                    className="inline-block"
+                  >
+                    <item.icon className="h-8 w-8 text-primary mb-4 group-hover:text-purple-400 transition-colors" />
+                  </motion.div>
                   <h4 className="font-semibold text-white mb-2">{item.title}</h4>
                   <p className="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
-                </div>
+                </motion.div>
               ))}
             </div>
           </Section>
@@ -316,19 +372,47 @@ action2.play();`}
             />
           </Section>
 
-          <div className="mt-32 p-8 rounded-2xl bg-gradient-to-br from-primary/20 to-purple-600/20 border border-primary/30 text-center relative overflow-hidden group">
-            <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl" />
-            <SparklesIcon className="h-10 w-10 text-primary mx-auto mb-4" />
-            <h3 className="text-2xl font-bold mb-4 text-white">Ready to elevate your project?</h3>
-            <p className="text-muted-foreground mb-8 max-w-md mx-auto">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, type: "spring" }}
+            className="mt-32 p-10 rounded-3xl bg-gradient-to-br from-primary/20 via-black/40 to-purple-600/20 border border-primary/30 text-center relative overflow-hidden group shadow-[0_0_50px_rgba(var(--primary),0.1)]"
+          >
+            <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-2xl" />
+            
+            <motion.div 
+              animate={{ rotate: 360 }}
+              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              className="absolute -top-10 -right-10 w-40 h-40 bg-purple-500/20 rounded-full blur-[50px] pointer-events-none"
+            />
+            <motion.div 
+              animate={{ rotate: -360 }}
+              transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+              className="absolute -bottom-10 -left-10 w-40 h-40 bg-blue-500/20 rounded-full blur-[50px] pointer-events-none"
+            />
+
+            <motion.div
+               animate={{ scale: [1, 1.2, 1] }}
+               transition={{ duration: 2, repeat: Infinity }}
+            >
+              <SparklesIcon className="h-12 w-12 text-primary mx-auto mb-6 relative z-10 drop-shadow-[0_0_15px_rgba(var(--primary),0.8)]" />
+            </motion.div>
+            
+            <h3 className="text-3xl font-bold mb-4 text-white relative z-10">Ready to elevate your project?</h3>
+            <p className="text-lg text-muted-foreground mb-8 max-w-lg mx-auto relative z-10 leading-relaxed">
               This interactive presentation is part of VoxClip AI's exceptional UI toolkit. We believe in providing over-the-top, premium experiences.
             </p>
-            <Link href="/">
-              <Button className="rounded-full px-8 shadow-[0_0_30px_rgba(var(--primary),0.5)]">
-                Back to VoxClip AI Home
-              </Button>
-            </Link>
-          </div>
+            <div className="relative z-10">
+              <Link href="/">
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="inline-block">
+                  <Button size="lg" className="rounded-full px-10 text-lg shadow-[0_0_30px_rgba(var(--primary),0.5)] bg-primary text-primary-foreground hover:bg-primary/90">
+                    Back to VoxClip AI Home
+                  </Button>
+                </motion.div>
+              </Link>
+            </div>
+          </motion.div>
 
         </main>
       </div>
