@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/SKYGOD07/VoxClip-AI/main/client/public/favicon.png" alt="VoxClip AI Logo" width="120" />
+  <img src="client/public/favicon.png" alt="VoxClip AI Logo" width="120" />
   <h1>🎙️ VoxClip AI – The Voice Video Editing Agent</h1>
   <p><strong>Transform video editing from a tedious, timeline-based workflow into a natural, conversational experience.</strong></p>
 
