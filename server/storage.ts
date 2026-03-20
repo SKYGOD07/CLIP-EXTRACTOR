@@ -1,10 +1,8 @@
-import { db } from "./db";
+import { db as firestore } from "./lib/firebase";
 import {
-  videos, clips,
   type Video, type InsertVideo,
   type Clip, type InsertClip,
 } from "@shared/schema";
-import { eq } from "drizzle-orm";
 
 export interface IStorage {
   // Videos
@@ -20,56 +18,66 @@ export interface IStorage {
   createClip(clip: InsertClip): Promise<Clip>;
 }
 
-export class DatabaseStorage implements IStorage {
+export class FirebaseStorage implements IStorage {
+  private videosColl = firestore.collection("videos");
+  private clipsColl = firestore.collection("clips");
+
   async getVideo(id: number): Promise<Video | undefined> {
-    const [video] = await db.select().from(videos).where(eq(videos.id, id));
-    return video;
+    const doc = await this.videosColl.doc(id.toString()).get();
+    if (!doc.exists) return undefined;
+    const data = doc.data();
+    return { ...data, id: Number(doc.id) } as Video;
   }
 
   async getVideos(): Promise<Video[]> {
-    return await db.select().from(videos).orderBy(videos.createdAt);
+    const snapshot = await this.videosColl.orderBy("createdAt", "desc").get();
+    return snapshot.docs.map(doc => ({ ...doc.data(), id: Number(doc.id) } as Video));
   }
 
   async createVideo(insertVideo: InsertVideo): Promise<Video> {
-    const [video] = await db.insert(videos).values(insertVideo).returning();
-    return video;
+    const id = Date.now(); // Simple numeric ID for now to match schema
+    const videoData = {
+      ...insertVideo,
+      createdAt: new Date(),
+      status: "uploaded",
+      viralityScore: 0,
+    };
+    await this.videosColl.doc(id.toString()).set(videoData);
+    return { ...videoData, id } as Video;
   }
 
   async updateVideoStatus(id: number, status: string): Promise<Video> {
-    const [video] = await db
-      .update(videos)
-      .set({ status })
-      .where(eq(videos.id, id))
-      .returning();
+    await this.videosColl.doc(id.toString()).update({ status });
+    const video = await this.getVideo(id);
+    if (!video) throw new Error("Video not found");
     return video;
   }
 
   async updateVideoTranscript(id: number, transcript: any): Promise<Video> {
-    const [video] = await db
-      .update(videos)
-      .set({ transcript })
-      .where(eq(videos.id, id))
-      .returning();
+    await this.videosColl.doc(id.toString()).update({ transcript });
+    const video = await this.getVideo(id);
+    if (!video) throw new Error("Video not found");
     return video;
   }
 
   async updateVideoScore(id: number, score: number): Promise<Video> {
-    const [video] = await db
-      .update(videos)
-      .set({ viralityScore: score })
-      .where(eq(videos.id, id))
-      .returning();
+    await this.videosColl.doc(id.toString()).update({ viralityScore: score });
+    const video = await this.getVideo(id);
+    if (!video) throw new Error("Video not found");
     return video;
   }
 
   async getClips(videoId: number): Promise<Clip[]> {
-    return await db.select().from(clips).where(eq(clips.videoId, videoId));
+    const snapshot = await this.clipsColl.where("videoId", "==", videoId).get();
+    return snapshot.docs.map(doc => ({ ...doc.data(), id: Number(doc.id) } as Clip));
   }
 
   async createClip(insertClip: InsertClip): Promise<Clip> {
-    const [clip] = await db.insert(clips).values(insertClip).returning();
-    return clip;
+    const id = Date.now() + Math.floor(Math.random() * 1000);
+    const clipData = { ...insertClip };
+    await this.clipsColl.doc(id.toString()).set(clipData);
+    return { ...clipData, id } as Clip;
   }
 }
 
-export const storage = new DatabaseStorage();
+export const storage = new FirebaseStorage();

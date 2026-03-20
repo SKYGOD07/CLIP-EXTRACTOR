@@ -15,6 +15,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { CinematicCameraHero } from "@/components/cinematic-camera-hero";
+import { VoiceAIEditingSection } from "@/components/voice-ai-section";
 
 // Helper Components
 const GlassStatCard = ({ metric, description }: { metric: string, description: string }) => (
@@ -216,68 +218,16 @@ export default function LandingPage() {
         </nav>
       </div>
 
-      <main className="max-w-[1600px] mx-auto w-full px-4 sm:px-6 lg:px-8 pt-4 pb-24 space-y-32">
+      <main className="max-w-[1600px] mx-auto w-full pt-4 pb-24 space-y-32">
         
-        {/* HERO SECTION */}
-        <section className="relative h-[92vh] min-h-[600px] rounded-[40px] overflow-hidden flex items-center px-8 lg:px-16">
-          {/* Backgrounds */}
-          <div className="absolute inset-0 bg-zinc-950/90 z-0" />
-          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop')] bg-cover bg-center opacity-40 mix-blend-overlay z-0" />
-          <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/90 via-zinc-950/40 to-transparent z-0" />
-          <div className="grain-overlay" />
-          
-          {/* Massive BG Text */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[22vw] font-black tracking-tighter text-white opacity-5 blur-sm select-none z-0">
-            CREATE
-          </div>
-
-          <div className="relative z-10 w-full flex flex-col lg:flex-row justify-between items-center lg:items-end gap-12 pb-12">
-            
-            {/* Left Typography */}
-            <motion.div 
-              className="max-w-2xl"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-xs font-bold tracking-widest uppercase mb-6">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                </span>
-                Agentic Editing
-              </div>
-              <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-[1.05] mb-6 shadow-black drop-shadow-2xl">
-                Edit videos <br/>
-                feeling <span className="text-zinc-500 italic">analog</span>
-              </h1>
-              <p className="text-lg md:text-xl text-zinc-400 font-light max-w-lg mb-8">
-                VoxClip AI is a real-time multimodal agent that replaces manual timeline scrubbing with voice commands.
-              </p>
-              
-              <Link href="/app">
-                <button className="bg-emerald-400 text-black px-8 py-4 rounded-full font-bold text-lg hover:bg-emerald-300 hover:scale-105 transition-all shadow-[0_0_30px_rgba(52,211,153,0.3)] flex items-center gap-3">
-                  <Play className="w-5 h-5 fill-black" /> Start Editing
-                </button>
-              </Link>
-            </motion.div>
-
-            {/* Right Stat Cards */}
-            <motion.div 
-              className="hidden lg:flex flex-col gap-4"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <GlassStatCard metric="Zero" description="Timeline scrubbing required" />
-              <GlassStatCard metric="400%" description="Faster clip extraction workflow" />
-              <GlassStatCard metric="100ms" description="Real-time multi-modal analysis" />
-            </motion.div>
-          </div>
-        </section>
+        {/* CINEMATIC HERO & 3D CAMERA EXPERIENCE */}
+        <CinematicCameraHero />
 
         {/* PROMPT SHOWCASE GALLERY */}
         <ShowcaseGallery />
+
+        {/* VOICE AI EDITING SECTION */}
+        <VoiceAIEditingSection />
 
         {/* FEATURE GRID */}
         <section id="features" className="container mx-auto px-4 lg:px-8 py-12">

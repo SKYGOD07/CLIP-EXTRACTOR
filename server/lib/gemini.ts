@@ -71,32 +71,39 @@ export async function geminiTranscribeAudio(
 ): Promise<string> {
   const client = getGeminiClient();
 
-  // Read audio file and convert to base64
-  const audioBuffer = fs.readFileSync(audioPath);
-  const base64Audio = audioBuffer.toString("base64");
-
   // Determine MIME type from extension
   const ext = path.extname(audioPath).toLowerCase();
   const mimeMap: Record<string, string> = {
-    ".mp3": "audio/mpeg",
+    ".mp3": "audio/mp3",
     ".wav": "audio/wav",
     ".m4a": "audio/mp4",
     ".ogg": "audio/ogg",
     ".webm": "audio/webm",
     ".flac": "audio/flac",
   };
-  const mimeType = mimeMap[ext] || "audio/mpeg";
+  const mimeType = mimeMap[ext] || "audio/mp3";
 
+  console.log(`Uploading audio to Gemini File API: ${audioPath}`);
+  
+  // 1. Upload file using the new File API
+  const fileResponse = await (client.files.upload as any)({
+    file: audioPath,
+    mimeType,
+  });
+  
+  console.log(`✓ Audio uploaded. URI: ${fileResponse.uri}`);
+
+  // 2. Generate content using the File URI
   const response = await client.models.generateContent({
-    model: "gemini-2.0-flash",
+    model: "gemini-2.5-flash",
     contents: [
       {
         role: "user",
         parts: [
           {
-            inlineData: {
-              mimeType,
-              data: base64Audio,
+            fileData: {
+              mimeType: fileResponse.mimeType || mimeType,
+              fileUri: fileResponse.uri,
             },
           },
           {
@@ -124,6 +131,16 @@ Rules:
       temperature: 0.1,
     },
   });
+
+  // 3. Clean up the file from Gemini
+  try {
+    await client.files.delete({ name: fileResponse.name });
+    console.log(`Cleaned up Gemini file: ${fileResponse.name}`);
+  } catch (e: any) {
+    console.warn(`Failed to clean up Gemini file:`, e.message);
+  }
+
+  return response.text || "{}";
 
   return response.text || "{}";
 }

@@ -60,7 +60,10 @@ export async function getVideoMetadata(videoPath: string): Promise<VideoMetadata
         width: videoStream.width || 0,
         height: videoStream.height || 0,
         codec: videoStream.codec_name || 'unknown',
-        fps: eval(videoStream.r_frame_rate || '30/1'), // e.g., "30/1" -> 30
+        fps: (() => {
+          const [num, den] = (videoStream.r_frame_rate || '30/1').split('/');
+          return Math.round(parseInt(num, 10) / parseInt(den, 10)) || 30;
+        })(),
       });
     });
   });

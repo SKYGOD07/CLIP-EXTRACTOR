@@ -25,8 +25,9 @@ export function useVideo(id: number) {
       return await res.json() as VideoResponse;
     },
     // Poll every 2 seconds if status is processing
-    refetchInterval: (data) => {
-      if (!data) return false;
+    refetchInterval: (query) => {
+      const data = query.state.data as VideoResponse | undefined;
+      if (!data || !data.status) return false;
       const processing = ["uploaded", "transcribing", "analyzing"].includes(data.status);
       return processing ? 2000 : false;
     },

@@ -255,7 +255,7 @@ export async function registerRoutes(
   // Ensure required directories exist
   const dirs = [
     "uploads",
-    path.join("client", "public", "clips"),
+    path.join("uploads", "clips"),
   ];
 
   dirs.forEach(dir => {
@@ -356,7 +356,7 @@ export async function registerRoutes(
   });
 
   // Restart video processing
-  app.post("/api/videos/:id/reprocess", async (req, res) => {
+  app.post("/api/videos/:id/process", async (req, res) => {
     try {
       const id = Number(req.params.id);
       
@@ -509,7 +509,7 @@ async function processVideo(videoId: number, videoPath: string) {
         }
 
         const filename = `clip-${videoId}-${index}.mp4`;
-        const outputPath = path.join("client", "public", "clips", filename);
+        const outputPath = path.join("uploads", "clips", filename);
 
         console.log(`\nCutting clip ${index + 1}/${analyzedClips.length}`);
         await cutClip(videoPath, adjusted.start, adjusted.end, outputPath);
